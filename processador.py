@@ -129,4 +129,24 @@ class Processador:
         for aviso in self.inconsistencias:
             print(aviso) 
 
+        # Salvar TXT
+        caminho_arquivo = os.path.join('.','relatorio.txt')
+        os.makedirs(os.path.dirname(caminho_arquivo), exist_ok=True)
         
+        with open(caminho_arquivo, 'w') as f:
+            f.write(f"Total de Registros Processados: {self.total_registros}\n")
+            f.write("--- RELATORIO ---\n")
+            f.write(f"Total de Registros Processados: {self.total_registros}\n")
+            f.write(f"Total de Creditos: R$ {self.total_creditos}\n")
+            f.write(f"Total de Debitos: R$ {self.total_debitos}\n")
+            f.write("-" * 30)
+            
+            f.write("--- SALDOS FINAIS POR CONTA ---\n")
+            for conta in sorted(self.contas.keys()):
+                saldo = self.contas[conta]
+                f.write(f"Conta: {conta} | Saldo: R$ {saldo:.2f}\n")
+                
+            f.write("-" * 30)
+            f.write("\n--- AVISOS ---\n")
+            for aviso in self.inconsistencias:
+                f.write(f"{aviso}\n") 
