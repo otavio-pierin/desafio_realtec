@@ -23,62 +23,52 @@ class Processador:
         dados = []
         try:
             with open(self.arquivo, mode='r', encoding='utf-8-sig') as file:
+                #guarda uma lista de listas com cada uma das linhas
+                #[["data1","conta1","tipo","valor","desc1"] --> leitor_bruto[0]
+                #["data2","conta2","tipo","valor","desc2"]] --> leitor_bruto[1]
+                leitor_bruto = list(csv.reader(file, delimiter=';'))
                 
-                #padroniza cabeçalho 
-                leitor_bruto = csv.reader(file, delimiter=';')
-                cabecalho = next(leitor_bruto)
-                
-                #tira espaço, letra maiúscula, Ç, acentuação
-                cabecalho_novo = [col.strip().lower().replace('ç', 'c').replace('ã', 'a').replace('ó', 'o') for col in cabecalho]
-                
-                mapa_colunas = {}
-                for i, col in enumerate(cabecalho_novo): #ajuda se mudar a ordem do cabeçalho, guarda cada info como um indice
-                    mapa_colunas[col] = i
+                if not leitor_bruto:
+                    return []
 
-                file.seek(0) #volta p o início do arquivo
-                next(file) # pula a linha do cabeçalho
+                #detecta se tem um cabeçalho
+                primeira_linha = leitor_bruto[0]
+                try:
+                    Decimal(primeira_linha[3].strip().replace(',', '.'))
+                    inicio_leitura = 0
+                except: #se não conseguir transformar em decimal, então é um texto (cabrçalho)
+                    inicio_leitura = 1 
 
-                #lê os dados 
-                leitor = csv.reader(file, delimiter=';')
-                
-                for linha in leitor:
-                    if not linha: continue #linhas vazias
+                #iteração das linhas
+                for i in range(inicio_leitura, len(leitor_bruto)):
+                    linha = leitor_bruto[i]
                     
-                    # mapa_colunas pega o valor pelo índice
-                    try:
-                        # busca dinâmica, posição da coluna
-                        idx_data = mapa_colunas.get('data')
-                        idx_conta = mapa_colunas.get('conta')
-                        idx_tipo = mapa_colunas.get('tipo')
-                        idx_valor = mapa_colunas.get('valor')
-                        
-                        # acha descrição
-                        idx_desc = mapa_colunas.get('descricao') 
+                    #testa se tem todos os dados p gerar uma transação(data;conta;tipo;valor;)
+                    if len(linha) < 4:
+                        continue
 
-                        # extrai os valores usando os índices do mapa_colunas
+                    try:
                         registro = {
-                            'data': linha[idx_data],
-                            'conta': linha[idx_conta].upper(),  
-                            'tipo': linha[idx_tipo].upper().strip(),
-                            'valor': Decimal(linha[idx_valor].replace(',', '.')), # vírgula tratada cm decimal se houver
-                            'descricao': linha[idx_desc] if idx_desc is not None else "Sem descricao"
+                            'data': linha[0].strip(),
+                            'conta': linha[1].strip().upper(),
+                            'tipo': linha[2].strip().upper(),
+                            'valor': Decimal(linha[3].strip().replace(',', '.')),
+                            'descricao': linha[4].strip() if len(linha) > 4 else "sem descrição"
                         }
                         dados.append(registro)
-
-                    except Exception as e:
-                        print(f"Linha ignorada: {linha} \nErro: {e}")
+                    except Exception as e_linha:
+                        print(f"Aviso: Linha {i+1} ignorada por falta de informaçoes")
 
         except Exception as e:
-            print(f"Erro ao ler arquivo: {e}")
-            import traceback
-            traceback.print_exc() #mostra erro
+            print(f"Erro ao processar o arquivo: {e}")
             return []
             
         return dados
-    
+
     def processar(self):
         transacoes = self.carregar_dados()
         #print(transacoes)
+        #iteração entre todos os registros guardados em dados[]
         for texto in transacoes:
             conta = texto['conta']
             tipo = texto['tipo']
