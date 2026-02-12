@@ -2,6 +2,7 @@
 Desafio técnico para vaga de Dev Agro
 
 --Instruções para uso--
+
 Adicione o caminho do arquivo csv como valor da variável "arquivo", presente no arquivo main.py e execute o mesmo.
 
 --Bibliotecas utilizadas--
