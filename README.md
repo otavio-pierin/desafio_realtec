@@ -1,6 +1,9 @@
 # desafio_realtec
 Desafio técnico para vaga de Dev Agro
 
+--Instruções para uso--
+Adicione o caminho do arquivo csv como valor da variável "arquivo", presente no arquivo main.py e execute o mesmo.
+
 --Bibliotecas utilizadas--
 
 csv: Essencial para ler e processar o arquivo de entrada no formato solicitado. Ela lida com a separação das colunas de forma mais eficiente do que um simples comando de texto.

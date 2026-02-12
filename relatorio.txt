@@ -1,0 +1,12 @@
+Total de Registros Processados: 4
+--- RELATORIO ---
+Total de Registros Processados: 4
+Total de Creditos: R$ 1501.00
+Total de Debitos: R$ 1300.00
+--------------------------------- SALDOS FINAIS POR CONTA ---
+Conta: BANCO | Saldo: R$ 300.00
+Conta: CAIXA | Saldo: R$ 801.00
+------------------------------
+--- AVISOS ---
+Incosistencia: Transação ignorada CAIXA.
+Saldo atual: 801.00, Tentativa de débito: 900.00

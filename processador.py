@@ -111,6 +111,8 @@ class Processador:
             self.contas[conta] = saldo_previsto
             self.total_registros += 1
             self.transacoes.append(texto)
+            print(f"Movimentação: {conta} {"Débito" if tipo=='D' else "Credito"}, saldo R${self.contas[conta]}")
+            print("-"*30)
 
     def gerar_relatorio(self):
         print("--- RELATÓRIO DE PROCESSAMENTO -*--")
